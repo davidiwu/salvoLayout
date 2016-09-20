@@ -1,0 +1,80 @@
+* {
+	margin: 0;
+}
+
+html, body {
+	height: 100%;
+}
+
+#viewer-container {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    background-color: white;
+}
+
+#viewer-menu {
+    float: right;
+    height: 50px;
+    margin-top: 5px;
+}
+
+#viewer-layout {
+    clear: both;
+    background-color: white;
+}
+
+.dropdown-menu {
+    min-width: 300px;
+}
+
+.layout-detail {
+    display: inline;
+    height: 40px;
+}
+
+#layout-menu {
+    width: 180px;
+    height: 40px;
+    position: relative;
+    border-radius: 0;
+}
+
+#layout-icon {
+    position: absolute;
+    top: 4px;
+    left: 15px;
+}
+
+#layout-icon-text {
+    margin-left: 20px;
+}
+
+svg {
+    height: 100%;
+}
+
+.btn-layout {
+    width: 60px;
+    height: 40px;
+    border-radius: 0;
+}
+
+#layout-toggle {
+    height: 40px;
+}
+
+#layout-container {
+    border: 1px dotted black;
+    position: absolute;
+    top: 50px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+}
+
+.default-salvo-panel {
+    border: 1px dashed black;
+    position: absolute;
+    padding: 1px 1px 1px 1px;
+}

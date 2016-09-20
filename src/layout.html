@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- Required meta tags always come first -->
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<meta http-equiv="x-ua-compatible" content="ie=edge" />
+
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/salvo.css" />
+	</head>
+	<body>
+		<div id="viewer-container">
+			<div id="viewer-menu">
+				<div class="dropdown">
+					<button type="button" class="btn btn-default dropdown-toggle" id="layout-menu"
+                    data-toggle="dropdown">
+						<span data-bind="label" id="layout-icon"></span>&nbsp;
+						<span id="layout-icon-text">View Layout</span>&nbsp;&nbsp;
+						<span class="caret"></span>
+					</button>
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="layout-menu">
+						<div class="btn-group" role="group" aria-label="View Layout" id="layout-group">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="layout-container">
+			</div>
+		</div>
+
+		<script id="hidden-template" type="text/x-custom-template">
+			<div class="default-salvo-panel" ondrop="drop(event)" ondragover="allowDrop(event)">
+				<div class="jwplayerBox"></div>
+			</div>
+		</script>
+
+		<script id="hidden-layout" type="text/x-custom-template">
+			<button type="button" class="btn btn-layout">
+				<div class="layout-detail">
+				</div>
+			</button>
+		</script>
+
+		<script src="bootstrap/jquery.min.js"></script>
+		<script src="bootstrap/tether.min.js"></script>
+		<script src="bootstrap/bootstrap.min.js"></script>
+		<script src="js/salvo.js"></script>
+	</body>
+</html>
