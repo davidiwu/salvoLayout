@@ -44,76 +44,118 @@
 				new LayoutSlot(1, 3, 1, 1), new LayoutSlot(2, 3, 1, 1), new LayoutSlot(3, 0, 1, 1),
 				new LayoutSlot(3, 1, 1, 1), new LayoutSlot(3, 2, 1, 1), new LayoutSlot(3, 3, 1, 1)], 4 / 3, !1));
 
-	var createSVGbutton = function (layout) {
-		var svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-		//$(svgElement).attr('viewbox', '0 0 100 100');
-		$(svgElement).width(30);
-		$(svgElement).height(30);
+	var uuid = new Date().getTime();
 
-		var widthRatio = 30 / layout.width;
-		var heightRatio = 30 / layout.height;
+	var SalvoViews = function () {
 
-		$.each(layout.slots, function (index, value) {
-			var svgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-			$(svgRect).attr({
-				x : (value.left * widthRatio),
-				y : (value.top * heightRatio),
-				width : (value.width * widthRatio),
-				height : (value.height * heightRatio)
+		var _create = function (target, settings) {
+			this.uuid += 1;
+
+			var viewContainer = $(target);
+			var viewElems = $(`<div id="viewer-menu">
+								<div class="dropdown">
+									<button type="button" class="btn btn-default dropdown-toggle" id="layout-menu"
+				                    data-toggle="dropdown">
+										<span data-bind="label" id="layout-icon"></span>&nbsp;
+										<span id="layout-icon-text">View Layout</span>&nbsp;&nbsp;
+										<span class="caret"></span>
+									</button>
+									<div class="dropdown-menu dropdown-menu-right" aria-labelledby="layout-menu">
+										<div class="btn-group" role="group" aria-label="View Layout" id="layout-group">
+										</div>
+									</div>
+								</div>
+							</div>`) 
+				.appendTo(viewContainer);
+
+			var panelContainer = $('<div />')
+				.attr({
+					id : this.uuid,
+					class : 'layout-container'
+				})
+				.insertAfter(viewElems);
+
+			salvoContainer = new SalvoLayout(panelContainer, this.uuid);
+
+		};
+
+		var createSVGbutton = function (layout) {
+			var svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+			//$(svgElement).attr('viewbox', '0 0 100 100');
+			$(svgElement).width(30);
+			$(svgElement).height(30);
+
+			var widthRatio = 30 / layout.width;
+			var heightRatio = 30 / layout.height;
+
+			$.each(layout.slots, function (index, value) {
+				var svgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+				$(svgRect).attr({
+					x : (value.left * widthRatio),
+					y : (value.top * heightRatio),
+					width : (value.width * widthRatio),
+					height : (value.height * heightRatio)
+				});
+				$(svgElement).append($(svgRect));
+				$(svgRect).attr({
+					fill : 'white',
+					stroke : 'black'
+				});
 			});
-			$(svgElement).append($(svgRect));
-			$(svgRect).attr({
-				fill : 'white',
-				stroke : 'black'
+			return svgElement;
+		};
+
+		var createLayoutMenu = function () {
+			var layoutGroup = $('#layout-group');
+			layoutGroup.empty();
+			$.each(layouts, function (index, value) {
+				var layoutBtn = $('<button type="button" class="btn btn-layout"></button>');
+				layoutBtn.prop('id', 'layout' + value.length);
+				layoutBtn.on('click', btnLayoutClick);
+				layoutGroup.append(layoutBtn);
+				var layoutDetail = $('<div class="layout-detail"></div>')
+					.appendTo(layoutBtn);
+				layoutDetail.append($(createSVGbutton(value)));
 			});
+		};
+
+		var switchLayout = function (layoutId) {
+			panelContainer.trigger("switchLayoutEvent" + uuid, [layoutId]);
+		};
+
+		var switchToDefaultLayout = function () {
+			var defaultLayout = $('#layout1');
+			defaultLayout.closest('.dropdown')
+			.find('[data-bind="label"]')
+			.empty()
+			.append(defaultLayout.find('.layout-detail').clone());
+			switchLayout('layout1');
+		};
+
+		var btnLayoutClick = function (e) {
+			var tar = $(e.currentTarget);
+			tar.closest('.dropdown')
+			.find('[data-bind="label"]')
+			.empty()
+			.append(tar.find('.layout-detail').clone())
+			.end()
+			.find('.dropdown-toggle')
+			.dropdown('toggle');
+
+			var layoutId = tar.attr("id");
+			switchLayout(layoutId);
+			return false;
+		};
+
+		$(document).ready(function () {
+			createLayoutMenu();
+			switchToDefaultLayout();
 		});
-		return svgElement;
 	};
 
-	var createLayoutMenu = function () {
-		var layoutGroup = $('#layout-group');
-		layoutGroup.empty();
-		$.each(layouts, function (index, value) {
-			var template = $('#hidden-layout').html();
-			var layoutBtn = $(template).clone();
-			$(layoutBtn).prop('id', 'layout' + value.length);
-			layoutGroup.append(layoutBtn);
-			var svgContainer = $(layoutBtn).find('.layout-detail');
-			$(svgContainer).append($(createSVGbutton(value)));
-		});
-	};
+	var SalvoLayout = function (container, containerid, options, newLayouts) {
 
-	var switchLayout = function (layoutId) {
-		$('#layout-container').trigger("switchLayoutEvent", [layoutId]);
-	};
-
-	var switchToDefaultLayout = function () {
-		var defaultLayout = $('#layout1');
-		defaultLayout.closest('.dropdown')
-		.find('[data-bind="label"]')
-		.empty()
-		.append(defaultLayout.find('.layout-detail').clone());
-		switchLayout('layout1');
-	};
-
-	var btnLayoutClick = function (e) {
-		var tar = $(e.currentTarget);
-		tar.closest('.dropdown')
-		.find('[data-bind="label"]')
-		.empty()
-		.append(tar.find('.layout-detail').clone())
-		.end()
-		.find('.dropdown-toggle')
-		.dropdown('toggle');
-
-		var layoutId = tar.attr("id");
-		switchLayout(layoutId);
-		return false;
-	};
-
-	$.fn.salvoLayout = function (options, newLayouts) {
-
-		var container = $(this);
+		//var container = $(this);
 
 		var selectPanel = function (e) {
 			$('.default-salvo-panel').each(function (index, value) {
@@ -258,20 +300,74 @@
 		};
 		$(window).resize(resizeContainer);
 
-		container.on("switchLayoutEvent", function (event, arg1) {
+		container.on("switchLayoutEvent" + containerid, function (event, arg1) {
 			switchLayout(arg1);
 		});
 
 		return this;
 	};
 
-	$(document).ready(function () {
+	$.extend(SalvoViews.prototype, {
+		
+		_create: function( target, settings ) {
+		var inst;
+		
+		if ( !target.id ) {
+			this.uuid += 1;
+			target.id = "sv" + this.uuid;
+		}
+		inst = this._newInst( $( target ) );
+		inst.settings = $.extend( {}, settings || {} );	
+		this._inlineDatepicker( target, inst );
+		
+	},
 
-		createLayoutMenu();
+	/* Create a new instance object. */
+	_newInst: function( target ) {
+		var id = target[ 0 ].id; // escape jQuery meta chars
+		return { id: id, 
+				input: target, // associated target		
+				dpDiv: this.dpDiv // presentation div
+			};
+	},
+	
+		/* Attach an inline date picker to a div. */
+	_inlineDatepicker: function( target, inst ) {
+		var divSpan = $( target );
+		if ( divSpan.hasClass( this.markerClassName ) ) {
+			return;
+		}
+		divSpan.addClass( this.markerClassName ).append( inst.dpDiv );
+		$.data( target, "datepicker", inst );
+		this._setDate( inst, this._getDefaultDate( inst ), true );
+		this._updateDatepicker( inst );
+		this._updateAlternate( inst );
 
-		$('.btn-layout').on('click', btnLayoutClick);
+		//If disabled option is true, disable the datepicker before showing it (see ticket #5665)
+		if ( inst.settings.disabled ) {
+			this._disableDatepicker( target );
+		}
 
-		switchToDefaultLayout();
+		// Set display:block in place of inst.dpDiv.show() which won't work on disconnected elements
+		// http://bugs.jqueryui.com/ticket/7552 - A Datepicker created on a detached div has zero height
+		inst.dpDiv.css( "display", "block" );
+	},
+
 	});
+	
+	$.fn.salvoview = function (option) {
+		if (!this.length) {
+			return this;
+		}
 
-}(jQuery));
+		return this.each(function () {
+			$.salvoview._create(this, option);
+		});
+	}
+
+	$.salvoview = new SalvoViews();
+	$.salvoview.uuid = new Date().getTime();
+	$.salvoview.version = "1.0.0";
+
+}
+	(jQuery));

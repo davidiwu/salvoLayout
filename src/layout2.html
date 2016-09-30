@@ -53,7 +53,6 @@
 			background-color: white;
 		}
 		</style>
-
 	</head>
 	<body>
 
@@ -72,19 +71,34 @@
 		</div>
 		<div class="viewer-container">
 		</div>
-
+		
+		<div id="viewer-container4">
+		</div>
+		<button class="btn default-btn" type="button" id="switchLayout">Switch Layout</button>
+		
 		<script src="bootstrap/jquery.min.js"></script>
 		<script src="bootstrap/tether.min.js"></script>
 		<script src="bootstrap/bootstrap.min.js"></script>
-		<script src="js/salvoLayout.js"></script>
-		<script src="js/salvoLayoutOwner.js"></script>
-		<script src="js/smartView.js"></script>
+		<script src="js/salvoviews.js"></script>
 		<script>
-			$('#viewer-container').smartView();
-			$('#viewer-container2').smartView();
-			$('#viewer-container3').smartView();
-
-			$('.viewer-container').smartView();			
+			$('#viewer-container').salvoViews();
+			$('#viewer-container2').salvoViews();
+			$('#viewer-container3').salvoViews();
+			
+			$('.viewer-container').salvoViews();
+			
+			$('#viewer-container4').salvoLayout();
+			$('#switchLayout').on('click', function() {
+				//var id = Math.floor(Math.random() * 4) + 1
+				//var layout = layouts[id];
+				
+				var layout = new Layout("7 Camera Layout", 4, 4, 7, [new LayoutSlot(0, 0, 2, 2), new LayoutSlot(0, 2, 2, 2),
+				new LayoutSlot(2, 0, 2, 2), new LayoutSlot(2, 2, 1, 1), new LayoutSlot(2, 3, 1, 1),
+				new LayoutSlot(3, 2, 1, 1), new LayoutSlot(3, 3, 1, 1)], 4 / 3, !1);
+				
+				$('#viewer-container4').trigger("switchLayoutEvent", layout);
+			});
+			
 		</script>
 	</body>
 </html>
