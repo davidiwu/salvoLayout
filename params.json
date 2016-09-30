@@ -1,0 +1,6 @@
+{
+  "name": "Salvolayout",
+  "tagline": "a JavaScript library to create and switch salvo layout.",
+  "body": "# salvoLayout\r\n# function:\r\n# 1. Create pre-defined layout\r\n# 2. Switch layout \r\n# 3. Usage:\r\n\r\n<-- html code -->\r\n\r\n\t\t<div id=\"viewer-container\">\r\n\t\t</div>\r\n\r\n\t\t<div class=\"viewer-container\">\r\n\t\t</div>\r\n\t\t<div class=\"viewer-container\">\r\n\t\t</div>\r\n\r\n<-- js code -->\r\n\r\n\t\t$('#viewer-container').smartView();\r\n\r\n\t\t$('.viewer-container').smartView();\t",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
