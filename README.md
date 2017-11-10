@@ -1,6 +1,7 @@
 # salvoLayout
 
-	a javascript library to create pre-defined layouts, also can accept to add new layouts following the layout definition
+	a javascript library to create pre-defined layouts, 
+	also can accept to add new layouts following the layout definition
 
 # function:
 
